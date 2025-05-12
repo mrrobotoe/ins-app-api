@@ -29,4 +29,5 @@ urlpatterns = [
         name='swagger-ui'
     ),
     path('api/user/', include('user.urls')),
+    path('api/client/', include('client.urls')),
 ]
