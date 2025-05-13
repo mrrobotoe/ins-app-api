@@ -120,4 +120,6 @@ class ModelTests(TestCase):
             notes='Test notes',
         )
 
-        self.assertEqual(str(inspection), f"{inspection.inspection_type} - {inspection.client.name}")
+        self.assertEqual(
+            str(inspection),
+            f"{inspection.inspection_type} - {inspection.client.name}")

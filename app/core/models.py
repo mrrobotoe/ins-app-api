@@ -77,7 +77,6 @@ class Client(models.Model):
         return self.name
 
 
-
 class Inspection(models.Model):
     """Inspection model."""
 
