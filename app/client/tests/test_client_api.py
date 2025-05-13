@@ -8,7 +8,7 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
-from core.models import Client
+from core.models import Address, Client
 
 from client.serializers import ClientSerializer
 
@@ -19,11 +19,19 @@ def create_client(user, **params):
     """
     Create a client with the given parameters.
     """
+    address_defaults = {
+        'address': '123 Main St',
+        'address_line_2': 'Apt 4B',
+        'city': 'New York',
+        'state': 'NY',
+        'zip_code': '10001',
+    }
+
     defaults = {
         'name': 'Test Client',
         'email': 'client@example.com',
         'phone_number': '1234567890',
-        'main_address': '123 Main St',
+        'main_address': Address.objects.create(**address_defaults),
     }
     defaults.update(params)
 

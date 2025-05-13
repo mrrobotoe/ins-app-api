@@ -63,12 +63,61 @@ class ModelTests(TestCase):
             name='Test User',
         )
 
+        address = models.Address.objects.create(
+            address='123 Test St',
+            address_line_2='Apt 4B',
+            city='Test City',
+            state='Test State',
+            zip_code='12345',
+        )
+
         client = models.Client.objects.create(
             user=user,
             name='Test Client',
-            main_address='123 Test St',
+            main_address=address,
             phone_number='1234567890',
             email='client@example.com',
         )
 
         self.assertEqual(str(client), client.name)
+
+    def test_create_inspection(self):
+        """Test creating an inspection."""
+        user = get_user_model().objects.create(
+            email='test@example.com',
+            password='testpass123',
+            name='Test User',
+        )
+
+        address = models.Address.objects.create(
+            address='123 Test St',
+            address_line_2='Apt 4B',
+            city='Test City',
+            state='Test State',
+            zip_code='12345',
+        )
+
+        client = models.Client.objects.create(
+            user=user,
+            name='Test Client',
+            main_address=address,
+            phone_number='1234567890',
+            email='client@example.com',
+        )
+
+        inspection = models.Inspection.objects.create(
+            inspector_name=user,
+            client=client,
+            inspection_date='2023-10-01',
+            inspection_type='Residential',
+            report_number='RPT-001',
+            address=address,
+            buyer_agent='John Doe',
+            fee=100.00,
+            payment_status='Paid',
+            signed_status='Signed',
+            release_status='Released',
+            notes='Test notes',
+        )
+
+        self.assertEqual(str(inspection), f"{inspection.inspection_type} - {inspection.client.name}")

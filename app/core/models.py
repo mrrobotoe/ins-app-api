@@ -46,17 +46,59 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
 
 
+class Address(models.Model):
+    """Address model."""
+    address = models.CharField(max_length=255)
+    address_line_2 = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    zip_code = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f"{self.address}, {self.city}, {self.state} {self.zip_code}"
+
+
 class Client(models.Model):
     """Client model."""
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING
+    )
+    main_address = models.ForeignKey(
+        Address,
+        on_delete=models.DO_NOTHING,
     )
     name = models.CharField(max_length=255)
-    main_address = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)
     email = models.EmailField()
 
     def __str__(self):
         return self.name
+
+
+
+class Inspection(models.Model):
+    """Inspection model."""
+
+    inspector_name = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.DO_NOTHING,
+    )
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    inspection_date = models.DateField()
+    inspection_type = models.CharField(max_length=255)
+    report_number = models.CharField(max_length=255)
+    address = models.ForeignKey(
+        Address,
+        on_delete=models.DO_NOTHING
+    )
+    buyer_agent = models.CharField(max_length=255)
+    fee = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_status = models.CharField(max_length=50)
+    signed_status = models.CharField(max_length=50)
+    release_status = models.CharField(max_length=50)
+    notes = models.TextField()
+
+    def __str__(self):
+        return f"{self.inspection_type} - {self.client.name}"
